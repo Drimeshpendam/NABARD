@@ -1,12 +1,13 @@
 import React, { useMemo, useState } from 'react'
 import { marked } from 'marked'
 import { docTree, getDoc } from './content.js'
-import { backRevision, checkpoints, days, meritSections, notesForSubject, qualifyingSections, rotationFor, subjectColors } from './plan.js'
+import { backRevision, checkpoints, days, meritSections, qualifyingSections, rotationFor, subjectColors } from './plan.js'
 import { mains, phase1 } from './patterns.js'
 import { paperPct, papers, staleState, topicCompletion, topicLastStudied } from './progress.js'
-import { formatTargets, researchSources, timePlan } from './analysis.js'
+import { ardTopics, esiTopics, formatTargets, gaTopics, mainsTopics, researchSources, timePlan } from './analysis.js'
 import { practiceLinks } from './links.js'
 import { quizzes } from './quiz.js'
+import { studyGuides } from './studyContent.js'
 
 const LS_DONE = 'nabard-done-v1'
 const LS_PROGRESS = 'nabard-progress-v2'
@@ -53,16 +54,15 @@ function Sidebar({ view, setView, docs, progress }) {
           <div className="brand-title">NABARD Grade A</div>
           <div className="brand-sub">RDBS General Workspace</div>
         </div>
+        <button className="mobile-menu-toggle" aria-label="Toggle menu" onClick={() => setMenuOpen(!menuOpen)}>
+          {menuOpen ? '×' : '☰'}
+        </button>
       </div>
-
-      <button className="mobile-menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
-        {menuOpen ? 'Close menu' : 'Open menu'}
-      </button>
 
       <nav className="nav-stack">
         <NavButton active={view.type === 'home'} onClick={() => go({ type: 'home' })}>Today / Home</NavButton>
-        <NavButton active={view.type === 'plan'} onClick={() => go({ type: 'plan' })}>42-Day Study Plan</NavButton>
-        <NavButton active={view.type === 'patterns'} onClick={() => go({ type: 'patterns' })}>Exam Pattern</NavButton>
+        <NavButton active={view.type === 'plan'} onClick={() => go({ type: 'plan' })}>23-Day Merit Sprint</NavButton>
+        <NavButton active={view.type === 'patterns'} onClick={() => go({ type: 'patterns' })}>Exam Cracking Strategy</NavButton>
         <NavButton active={view.type === 'targets'} onClick={() => go({ type: 'targets' })}>Score Targets</NavButton>
         <NavButton active={view.type === 'quiz'} onClick={() => go({ type: 'quiz' })}>Take a Test</NavButton>
         <NavButton active={view.type === 'progress'} onClick={() => go({ type: 'progress' })}>Progress Board</NavButton>
@@ -104,14 +104,20 @@ function Sidebar({ view, setView, docs, progress }) {
   )
 }
 
-function StatCard({ label, value, note, tone }) {
-  return (
-    <div className={`stat-card ${tone || ''}`}>
+function StatCard({ label, value, note, tone, onClick }) {
+  const content = (
+    <>
       <div className="stat-value">{value}</div>
       <div className="stat-label">{label}</div>
       {note && <div className="stat-note">{note}</div>}
-    </div>
+    </>
   )
+  if (onClick) return <button type="button" className={`stat-card clickable ${tone || ''}`} onClick={onClick}>{content}</button>
+  return <div className={`stat-card ${tone || ''}`}>{content}</div>
+}
+
+function BackButton({ onBack }) {
+  return <button className="btn back-btn" onClick={onBack}>← Back</button>
 }
 
 function MeritMeter() {
@@ -130,7 +136,7 @@ function MeritMeter() {
   )
 }
 
-function TodayCard({ day, done, toggleDone, openDoc }) {
+function TodayCard({ day, done, toggleDone, openStudy }) {
   const today = todayISO()
   const selected = days.find((item) => item.date === today) || days.find((item) => item.date > today) || days[days.length - 1]
   const current = day || selected
@@ -165,13 +171,13 @@ function TodayCard({ day, done, toggleDone, openDoc }) {
         <button className={`btn ${isDone ? 'done' : 'primary'}`} onClick={() => toggleDone(`day-${current.d}`)}>
           {isDone ? 'Completed' : 'Mark complete'}
         </button>
-        <button className="btn" onClick={() => openDoc(notesForSubject[current.sub] || 'README.md')}>Open linked notes</button>
+        <button className="btn" onClick={() => openStudy(current.sub)}>Open study chunks</button>
       </div>
     </div>
   )
 }
 
-function Home({ done, toggleDone, openDoc }) {
+function Home({ done, toggleDone, openStudy, openTarget }) {
   const complete = Math.round(done.length / days.length * 100)
   const nextCheckpoint = checkpoints.find((cp) => !done.includes(`day-${cp.day}`)) || checkpoints[checkpoints.length - 1]
 
@@ -187,26 +193,26 @@ function Home({ done, toggleDone, openDoc }) {
       </section>
 
       <div className="stats-grid">
-        <StatCard label="Phase I merit target" value="65–70" note="/100" tone="green" />
-        <StatCard label="Mains target" value="140–150" note="/200" tone="blue" />
-        <StatCard label="Final target" value="180+" note="/250" tone="violet" />
+        <StatCard label="Phase I merit target" value="65–70" note="/100 · tap to break down" tone="green" onClick={() => openTarget('phase1')} />
+        <StatCard label="Mains target" value="140–150" note="/200 · tap to break down" tone="blue" onClick={() => openTarget('mains')} />
+        <StatCard label="Final target" value="180+" note="/250 · tap to break down" tone="violet" onClick={() => openTarget('final')} />
         <StatCard label="Next checkpoint" value={`D${nextCheckpoint.day}`} note={nextCheckpoint.target} />
       </div>
 
-      <TodayCard done={done} toggleDone={toggleDone} openDoc={openDoc} />
+      <TodayCard done={done} toggleDone={toggleDone} openStudy={openStudy} />
       <MeritMeter />
     </div>
   )
 }
 
-function Plan({ done, toggleDone, openDoc }) {
+function Plan({ done, toggleDone, openStudy }) {
   const weeks = []
   for (let i = 0; i < days.length; i += 7) weeks.push(days.slice(i, i + 7))
   return (
     <div className="page-stack">
       <header className="page-head">
         <div>
-          <div className="eyebrow">42-day foundation plan</div>
+          <div className="eyebrow">23-day merit sprint · Nov 28–Dec 20</div>
           <h1>Study Plan</h1>
           <p>Merit sections first, qualifying sections daily, descriptive practice from week two.</p>
         </div>
@@ -231,7 +237,7 @@ function Plan({ done, toggleDone, openDoc }) {
                     <span className="chip subtle">{rotationFor(day).label}</span>
                   </div>
                   <div className="action-row">
-                    <button className="btn small" onClick={() => openDoc(notesForSubject[day.sub] || 'README.md')}>Notes</button>
+                    <button className="btn small" onClick={() => openStudy(day.sub)}>Study chunks</button>
                     <button className={`btn small ${isDone ? 'done' : ''}`} onClick={() => toggleDone(id)}>{isDone ? 'Done' : 'Mark'}</button>
                   </div>
                 </article>
@@ -304,8 +310,8 @@ function Patterns() {
     <div className="page-stack">
       <header className="page-head">
         <div>
-          <div className="eyebrow">PYQ-informed pattern</div>
-          <h1>NABARD Grade A Pattern</h1>
+          <div className="eyebrow">PYQ-informed cracking strategy</div>
+          <h1>Exam Cracking Strategy</h1>
           <p>Topic weightages below are based on memory-based 2021–2025 question analysis, not official NABARD declarations.</p>
         </div>
       </header>
@@ -391,6 +397,140 @@ function Targets() {
           <div><b>Final</b><span>180+ / 250</span></div>
         </div>
       </div>
+    </div>
+  )
+}
+
+function TargetDetail({ target, openStudy }) {
+  const configs = {
+    phase1: {
+      title: 'Phase I Merit Target',
+      goal: '65–70 / 100',
+      summary: 'GA + ESI + ARD are the only sections used for Mains shortlisting. Target the high-frequency topics below first.',
+      sections: [
+        { label: 'ARD', marks: 40, subject: 'ARD', topics: ardTopics },
+        { label: 'ESI', marks: 40, subject: 'ESI', topics: esiTopics },
+        { label: 'GA', marks: 20, subject: 'GA', topics: gaTopics },
+      ],
+    },
+    mains: {
+      title: 'Mains Target',
+      goal: '140–150 / 200',
+      summary: 'Mains decides most of the final score. Descriptive English and structured ESI/ARD answers need deliberate practice.',
+      sections: [{ label: 'Mains', marks: 200, subject: 'Mains', topics: mainsTopics }],
+    },
+    final: {
+      title: 'Final Target',
+      goal: '180+ / 250',
+      summary: 'Final merit = Mains 200 + Interview 50. Phase I is only a screening gate; Mains and interview quality decide selection.',
+      sections: [
+        { label: 'Mains', marks: 200, subject: 'Mains', topics: mainsTopics },
+        { label: 'Interview', marks: 50, subject: 'NABARD', topics: [{ name: 'NABARD + Agriculture Interview', expected: '50 marks', priority: 'Final merit', seconds: '2–3 min/answer', checklist: [] }] },
+      ],
+    },
+  }
+  const config = configs[target] || configs.phase1
+  return (
+    <div className="page-stack">
+      <header className="page-head">
+        <div>
+          <div className="eyebrow">Clickable score target</div>
+          <h1>{config.title}</h1>
+          <p>{config.summary}</p>
+        </div>
+        <StatCard label="Target" value={config.goal} />
+      </header>
+      {config.sections.map((section) => (
+        <section className="card" key={section.label}>
+          <div className="pattern-head">
+            <h2>{section.label} — {section.marks} marks</h2>
+            <button className="btn small" onClick={() => openStudy(section.subject)}>Open study chunks</button>
+          </div>
+          <div className="target-topic-grid">
+            {section.topics.map((topic) => (
+              <div className="target-topic" key={topic.name}>
+                <b>{topic.name}</b>
+                <span>{topic.expected}{topic.share ? ` · ${topic.share}` : ''}</span>
+                <small>{topic.priority}{topic.seconds ? ` · ${topic.seconds}` : ''}</small>
+              </div>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  )
+}
+
+function PracticeBlock({ questions }) {
+  const [answers, setAnswers] = useState({})
+  return (
+    <div className="practice-block">
+      <h3>Try PYQ-style questions</h3>
+      {questions.map((question, index) => {
+        const selected = answers[index]
+        return (
+          <div className="question" key={question.q}>
+            <p>Q{index + 1}. {question.q}</p>
+            <div className="options">
+              {question.o.map((option, optionIndex) => {
+                const state = selected === undefined ? '' : optionIndex === question.a ? 'correct' : selected === optionIndex ? 'wrong' : 'muted'
+                return <button className={`option ${state}`} key={option} onClick={() => setAnswers({ ...answers, [index]: optionIndex })}>{option}</button>
+              })}
+            </div>
+            {selected !== undefined && <div className={`explanation ${selected === question.a ? 'good' : 'bad'}`}>{question.x}</div>}
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+function StudyView({ subject }) {
+  const guide = studyGuides[subject] || studyGuides.Overview
+  const [topicId, setTopicId] = useState(guide.topics[0]?.id)
+  const active = guide.topics.find((item) => item.id === topicId) || guide.topics[0]
+
+  return (
+    <div className="page-stack">
+      <header className="page-head">
+        <div>
+          <div className="eyebrow">Topic mastery chunks</div>
+          <h1>{guide.title}</h1>
+          <p>{guide.summary}</p>
+        </div>
+      </header>
+      <div className="topic-tabs">
+        {guide.topics.map((item) => (
+          <button className={`quiz-tab ${item.id === active.id ? 'active' : ''}`} key={item.id} onClick={() => setTopicId(item.id)}>
+            <b>{item.marks}</b><span>{item.title}</span><small>{item.pace}</small>
+          </button>
+        ))}
+      </div>
+      <section className="card study-topic">
+        <div className="pattern-head"><h2>{active.title}</h2><span>{active.pace}</span></div>
+        {active.chunks.map((item, index) => (
+          <article className="study-chunk" key={item.title}>
+            <div className="chunk-number">Chunk {index + 1}</div>
+            <h3>{item.title}</h3>
+            <p><b>Concept:</b> {item.concept}</p>
+            <p><b>Example:</b> {item.example}</p>
+            <div className="chunk-meta"><span><b>How asked:</b> {item.ask}</span><span><b>Trap:</b> {item.trap}</span></div>
+          </article>
+        ))}
+        <PracticeBlock questions={active.practice} />
+        {active.resources?.length > 0 && (
+          <div className="resource-strip">
+            <h3>PYQ / PDF resources</h3>
+            <div className="link-grid">
+              {active.resources.map((resource) => (
+                <a className="link-card" href={resource.url} target="_blank" rel="noreferrer" key={resource.name}>
+                  <b>{resource.name}</b><span>{resource.note}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+      </section>
     </div>
   )
 }
@@ -575,6 +715,7 @@ function DocView({ path, setView }) {
 
 export default function App() {
   const [view, setView] = useState({ type: 'home' })
+  const [history, setHistory] = useState([])
   const [done, setDone] = useState(() => readJSON(LS_DONE, []))
   const [progressState, setProgressState] = useState(() => readJSON(LS_PROGRESS, {}))
   const [scores, setScores] = useState(() => readJSON(LS_QUIZ, []))
@@ -600,20 +741,35 @@ export default function App() {
     setScores(next)
     saveJSON(LS_QUIZ, next)
   }
-  const openDoc = (path) => setView({ type: 'doc', path })
+  const navigate = (nextView) => {
+    setHistory((stack) => [...stack, view])
+    setView(nextView)
+  }
+  const goBack = () => {
+    const previous = history[history.length - 1]
+    if (!previous) return
+    setHistory(history.slice(0, -1))
+    setView(previous)
+  }
+  const openDoc = (path) => navigate({ type: 'doc', path })
+  const openStudy = (subject) => navigate({ type: 'study', subject })
+  const openTarget = (target) => navigate({ type: 'target', target })
 
   return (
     <div className="app-shell">
-      <Sidebar view={view} setView={setView} progress={paperProgress} />
+      <Sidebar view={view} setView={navigate} progress={paperProgress} />
       <main className="main-content">
-        {view.type === 'home' && <Home done={done} toggleDone={toggleDone} openDoc={openDoc} />}
-        {view.type === 'plan' && <Plan done={done} toggleDone={toggleDone} openDoc={openDoc} />}
+        {history.length > 0 && <BackButton onBack={goBack} />}
+        {view.type === 'home' && <Home done={done} toggleDone={toggleDone} openStudy={openStudy} openTarget={openTarget} />}
+        {view.type === 'plan' && <Plan done={done} toggleDone={toggleDone} openStudy={openStudy} />}
         {view.type === 'patterns' && <Patterns />}
         {view.type === 'targets' && <Targets />}
+        {view.type === 'target' && <TargetDetail target={view.target} openStudy={openStudy} />}
+        {view.type === 'study' && <StudyView key={view.subject} subject={view.subject} />}
         {view.type === 'quiz' && <Quiz scores={scores} saveScore={saveScore} />}
         {view.type === 'progress' && <ProgressBoard progressState={progressState} toggleProgressItem={toggleProgressItem} />}
         {view.type === 'links' && <Links />}
-        {view.type === 'doc' && <DocView path={view.path} setView={setView} />}
+        {view.type === 'doc' && <DocView path={view.path} setView={navigate} />}
       </main>
     </div>
   )

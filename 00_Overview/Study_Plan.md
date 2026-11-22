@@ -1,71 +1,49 @@
-# NABARD Grade A — 42-Day Foundation Plan
+# NABARD Grade A — 23-Day Merit Sprint
 
-Designed for a B.Sc. Agriculture fresher targeting **RDBS General**.
+**Window:** Saturday 28 November → Sunday 20 December.
 
-Core rule: **60–65% of Phase-I time goes to GA + ESI + ARD**, because only those 100 marks decide Mains shortlisting.
+Core rule: Phase-I shortlisting uses only **GA + ESI + ARD = 100 marks**. This plan gives most time to those sections while keeping qualifying-section floors safe.
 
 ## Daily template
 
 | Block | Time | Work |
 |---|---:|---|
-| ARD | 60 min | Concept + schemes + rural institutions |
-| ESI | 60 min | Economy/social issues + current link |
-| GA | 30 min | Daily current affairs + weekly recall |
-| Aptitude rotation | 45 min | Quant / Reasoning / English / Computer / DM |
-| Descriptive writing | 30 min | English or ESI/ARD answer writing |
-| Error log | 10 min | Record every miss and why |
+| Main topic | 75 min | Chunked concept study + examples |
+| Merit drill | 30 min | PYQ-style questions |
+| Qualifying rotation | 35 min | Quant/Reasoning or English/GA or Computer/DM |
+| Error log | 10 min | Every miss + correction rule |
 
 ## Plan
 
-| Day | Focus |
-|---:|---|
-| 1 | Exam pattern, source setup, NABARD functions/history, baseline mock |
-| 2 | ARD: NABARD role, rural credit system, cooperatives |
-| 3 | ESI: national income, growth vs development, GDP basics |
-| 4 | ARD: soil types, land degradation, watershed development |
-| 5 | ESI: poverty, inequality, unemployment measures |
-| 6 | GA week-1 recap + Quant/Reasoning sectional drill |
-| 7 | Weekly test #1 + error-log repair |
-| 8 | ARD: irrigation, micro-irrigation, water-use efficiency |
-| 9 | ESI: inflation, monetary policy basics, RBI functions |
-| 10 | ARD: cropping systems, major crops, horticulture basics |
-| 11 | ESI: fiscal policy, budget, deficit types |
-| 12 | ARD: seeds, fertilizers, soil health cards |
-| 13 | GA week-2 recap + English objective drill |
-| 14 | Weekly test #2 + first descriptive English set |
-| 15 | ARD: animal husbandry, dairy, fisheries, allied income |
-| 16 | ESI: banking system, rural credit, priority sector lending |
-| 17 | ARD: agri-marketing, eNAM, APMC, FPOs |
-| 18 | ESI: social sector schemes, health, education, gender |
-| 19 | ARD: crop insurance, PMFBY, agri-risk management |
-| 20 | GA week-3 recap + Computer/DM drill |
-| 21 | Weekly test #3 + ESI/ARD descriptive answers |
-| 22 | ARD: climate-resilient agriculture, sustainable farming |
-| 23 | ESI: employment schemes, MGNREGA, skilling |
-| 24 | ARD: rural institutions — SHGs, JLGs, MFIs, NABARD refinance |
-| 25 | ESI: demographic dividend, migration, urbanization |
-| 26 | ARD: food processing, post-harvest, storage, supply chains |
-| 27 | GA week-4 recap + mixed aptitude drill |
-| 28 | Weekly test #4 + descriptive English timed set |
-| 29 | ARD: government schemes — flagship agriculture schemes |
-| 30 | ESI: Economic Survey + Budget agriculture/rural points |
-| 31 | ARD: current schemes, reports, NABARD publications |
-| 32 | ESI: financial inclusion, Jan Dhan, DBT, digital payments |
-| 33 | ARD: natural resources, forestry, agroforestry |
-| 34 | GA week-5 recap + PYQ-pattern practice |
-| 35 | Weekly test #5 + full merit-section simulation |
-| 36 | Revision: ARD static tables and scheme matrix |
-| 37 | Revision: ESI static framework and reports |
-| 38 | Mains sprint: English essay + précis practice |
-| 39 | Mains sprint: ESI descriptive answers |
-| 40 | Mains sprint: ARD descriptive answers |
-| 41 | Full Phase-I mock + error analysis |
-| 42 | Final foundation reset: weakest 3 topics + next-cycle plan |
+| Day | Date | Focus |
+|---:|---|---|
+| 1 | Nov 28 | Exam pattern, PYQ strategy, source setup + baseline merit test |
+| 2 | Nov 29 | ARD schemes/current affairs, PMFBY, KCC, Budget-linked agriculture |
+| 3 | Nov 30 | Soil types, nutrients, erosion and water conservation |
+| 4 | Dec 1 | Animal husbandry, poultry, breeds, terms and diseases |
+| 5 | Dec 2 | Horticulture, plantation systems and production statistics |
+| 6 | Dec 3 | Agronomy, crops, seed chain, weeds and fertilizers |
+| 7 | Dec 4 | Weekly test #1 + error-log repair + qualifying sprint |
+| 8 | Dec 5 | ESI financial inclusion, KCC, PSL, RIDF, SHGs, rural credit |
+| 9 | Dec 6 | ESI schemes, reports, social sector and vulnerable groups |
+| 10 | Dec 7 | GA banking/finance/NABARD/RBI news, reports and indices |
+| 11 | Dec 8 | ARD marketing, FPOs, eNAM, cooperatives, agri economics |
+| 12 | Dec 9 | Irrigation, fisheries, forestry, engineering, extension, climate |
+| 13 | Dec 10 | ESI Budget, Survey, GDP, inflation, monetary/fiscal policy |
+| 14 | Dec 11 | Weekly test #2 + merit simulation + descriptive start |
+| 15 | Dec 12 | GA schemes, static GA, days, awards, persons, international |
+| 16 | Dec 13 | Rural development, MGNREGA, PMAY-G, Panchayats, institutions |
+| 17 | Dec 14 | ESI poverty, employment, governance, MSME, social protection |
+| 18 | Dec 15 | Mains English: essay + précis timed writing |
+| 19 | Dec 16 | Mains ESI/ARD answer-writing sprint |
+| 20 | Dec 17 | PYQ-pattern test + merit speed repair |
+| 21 | Dec 18 | Qualifying-section speed sprint |
+| 22 | Dec 19 | Final revision + weakest high-yield topics + mock |
+| 23 | Dec 20 | Formula sheet, error log, exam-order plan, cutoff check |
 
-## Weekly minimum
+## Score gates
 
-- 1 full or sectional mock
-- 3 descriptive answers
-- 1 GA revision sheet
-- 1 error-log rewrite
-- 1 NABARD/rural-development topic learned for interview depth
+- Day 7: baseline and weak-topic diagnosis
+- Day 14: merit **55+/100**
+- Day 20: merit **65+/100**
+- Final goal: **65–70+/100**

@@ -2,7 +2,7 @@
 export const quizzes = [
   {
     id: 'nabard-orientation-d1', day: 1,
-    title: 'Day 1 — Exam Pattern + NABARD Orientation',
+    title: 'Day 1 — Exam Cracking Strategy + NABARD Orientation',
     tag: '10 Qs · click an option to check',
     questions: [
       { q: 'Which Phase-I sections decide Mains shortlisting for RDBS?', o: ['All 8 sections equally', 'Quant + Reasoning only', 'GA + ESI + ARD', 'English + Computer + DM', 'Only ARD'], a: 2, x: 'GA 20 + ESI 40 + ARD 40 = the 100-mark merit section.', t: 'Pattern' },

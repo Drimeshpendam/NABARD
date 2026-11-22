@@ -1,4 +1,4 @@
-# NABARD Grade A — RDBS General Exam Pattern
+# NABARD Grade A — RDBS General Exam Cracking Strategy
 
 Pattern below follows the latest completed **2025–26 cycle**. Recheck the next notification because NABARD can revise stages, marks, or dates.
 

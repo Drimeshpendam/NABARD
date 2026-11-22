@@ -19,7 +19,7 @@ Study workspace for NABARD Grade A Assistant Manager (RDBS), prepared for a B.Sc
 
 ## Workflow
 
-1. Read `00_Overview/Exam_Pattern.md` first — Phase I shortlisting uses only GA + ESI + ARD.
+1. Read `00_Overview/Exam_Cracking_Strategy.md` first — Phase I shortlisting uses only GA + ESI + ARD.
 2. Read `00_Overview/Target_Chart.md` and convert it into your personal score target.
 3. Follow `00_Overview/Study_Plan.md`; update `00_Overview/Progress_Tracker.md` weekly.
 4. Every mock or quiz goes into `06_Mocks_and_Practice/Error_Log.md`.
