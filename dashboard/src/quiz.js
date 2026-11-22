@@ -1,0 +1,42 @@
+// Starter quiz bank — instant-feedback MCQs in the dashboard.
+export const quizzes = [
+  {
+    id: 'nabard-orientation-d1', day: 1,
+    title: 'Day 1 — Exam Pattern + NABARD Orientation',
+    tag: '10 Qs · click an option to check',
+    questions: [
+      { q: 'Which Phase-I sections decide Mains shortlisting for RDBS?', o: ['All 8 sections equally', 'Quant + Reasoning only', 'GA + ESI + ARD', 'English + Computer + DM', 'Only ARD'], a: 2, x: 'GA 20 + ESI 40 + ARD 40 = the 100-mark merit section.', t: 'Pattern' },
+      { q: 'Phase I total duration and question count are:', o: ['100 Qs · 90 min', '150 Qs · 100 min', '200 Qs · 120 min', '200 Qs · 180 min', '250 Qs · 120 min'], a: 2, x: 'One combined objective paper: 200 questions in 120 minutes.', t: 'Pattern' },
+      { q: 'ARD carries how many Phase-I marks?', o: ['20', '30', '40', '50', '100'], a: 2, x: 'ARD is a 40-mark merit section.', t: 'Pattern' },
+      { q: 'Final merit for RDBS is based on:', o: ['Prelims + Mains', 'Mains only', 'Prelims + Interview', 'Mains + Interview', 'Psychometric + Interview'], a: 3, x: 'Mains 200 + Interview 50 = final 250; Phase I is screening.', t: 'Pattern' },
+      { q: 'NABARD is best described as:', o: ['India’s central bank', 'A market securities regulator', 'Apex development bank for agriculture and rural development', 'A public-sector commercial bank', 'A crop-insurance company'], a: 2, x: 'NABARD is the apex development bank for agriculture and rural development.', t: 'NABARD' },
+      { q: 'Mains Paper I for the General stream is:', o: ['General English descriptive, 100 marks', 'Quant objective, 100 marks', 'Reasoning objective, 100 marks', 'Agriculture descriptive, 50 marks', 'GA objective, 100 marks'], a: 0, x: 'General English is a 100-mark typed descriptive paper.', t: 'Mains' },
+      { q: 'Mains Paper II for General includes:', o: ['Only English', 'Only Quant', 'ESI + ARD objective and descriptive', 'Only computer knowledge', 'Only agriculture engineering'], a: 2, x: 'Paper II is ESI + ARD: 50 objective + 50 descriptive.', t: 'Mains' },
+      { q: 'The qualifying sections in Phase I are:', o: ['GA, ESI, ARD', 'Reasoning, English, Computer, Quant, Decision Making', 'Only Reasoning + Quant', 'Only English + Computer', 'Interview sections'], a: 1, x: 'Five qualifying sections must each clear their minimum cutoff.', t: 'Pattern' },
+      { q: 'A safe Phase-I merit target for General stream is:', o: ['30/100', '40/100', '50/100', '65–70/100', '100/100 only'], a: 3, x: 'Last UR cutoff was about 54.5; a 65–70 target gives buffer.', t: 'Targets' },
+      { q: 'The most efficient Phase-I study allocation is roughly:', o: ['90% Quant', '60–65% GA+ESI+ARD', '50% Computer', 'Only mock tests', 'Only English'], a: 1, x: 'Merit sections decide the shortlist, so they get the majority of study time.', t: 'Strategy' },
+    ],
+  },
+  {
+    id: 'ard-esi-starter', day: 2,
+    title: 'ARD + ESI Starter Test',
+    tag: '15 Qs · click an option to check',
+    questions: [
+      { q: 'PM-KISAN provides eligible farmer families with:', o: ['₹2,000 per month', '₹6,000 per year in three instalments', '₹10,000 per year', 'One-time ₹50,000 grant', 'Free crop insurance'], a: 1, x: 'PM-KISAN provides ₹6,000 per year in three equal instalments.', t: 'Schemes' },
+      { q: 'eNAM is primarily:', o: ['A soil-testing program', 'An online agricultural trading platform', 'A crop insurance portal', 'A rural housing scheme', 'A seed certification body'], a: 1, x: 'eNAM links agricultural markets through an electronic trading platform.', t: 'Agri marketing' },
+      { q: 'PMFBY mainly addresses:', o: ['Farm mechanization', 'Crop insurance and yield-risk protection', 'Fertilizer subsidy', 'Rural housing', 'Agricultural exports'], a: 1, x: 'PMFBY is India’s flagship crop-insurance scheme.', t: 'Schemes' },
+      { q: 'PACS operate mainly at which level?', o: ['National level', 'State level', 'District level', 'Village level', 'International level'], a: 3, x: 'Primary Agricultural Credit Societies form the village-level base of cooperative credit.', t: 'Cooperatives' },
+      { q: 'MGNREGA provides a legal guarantee of:', o: ['200 days employment to every individual', '100 days wage employment to every rural household', 'Free land to farmers', 'Subsidized loans to SHGs', 'Crop insurance coverage'], a: 1, x: 'The guarantee is 100 days of wage employment per rural household, not per person.', t: 'Rural development' },
+      { q: 'The repo rate is set by:', o: ['NABARD', 'SEBI', 'RBI', 'Ministry of Agriculture', 'NITI Aayog'], a: 2, x: 'Repo is RBI’s policy rate for lending to banks.', t: 'ESI' },
+      { q: 'GDP means:', o: ['Total income of government', 'Market value of final goods and services produced within a country in a period', 'Total exports minus imports', 'Savings of households', 'Agriculture output only'], a: 1, x: 'GDP is the market value of final goods/services produced domestically in a period.', t: 'ESI' },
+      { q: 'An FPO is:', o: ['A farmer-owned producer organization', 'A fertilizer price office', 'A rural post office', 'A crop-storage subsidy', 'A bank regulator'], a: 0, x: 'Farmer Producer Organizations collectivize farmers for scale, inputs, marketing, and value addition.', t: 'ARD' },
+      { q: 'A typical SHG is:', o: ['A village-level group formed for savings and credit linkage', 'A government bank branch', 'A crop insurance company', 'A fertilizer cooperative', 'A state development board'], a: 0, x: 'Self-Help Groups pool savings and access institutional credit, often through bank linkage.', t: 'Rural finance' },
+      { q: 'RIDF is associated with:', o: ['SEBI', 'NABARD', 'TRAI', 'FSSAI', 'ISRO'], a: 1, x: 'Rural Infrastructure Development Fund is associated with NABARD-supported rural infrastructure.', t: 'NABARD' },
+      { q: 'Financial inclusion primarily means:', o: ['Higher income-tax collection', 'Access to affordable formal financial services for all', 'Only urban digital banking', 'Free insurance for all banks', 'Cash-only rural economy'], a: 1, x: 'Financial inclusion means affordable access to savings, credit, payments, insurance, and related services.', t: 'ESI' },
+      { q: 'Priority Sector Lending is mainly regulated/directed by:', o: ['NABARD', 'RBI', 'SEBI', 'IRDAI', 'PFRDA'], a: 1, x: 'RBI prescribes priority-sector categories and targets for banks.', t: 'Banking' },
+      { q: 'Micro-irrigation includes:', o: ['Canal and flood irrigation only', 'Drip and sprinkler irrigation', 'Rainwater harvesting only', 'Deep-sea fishing', 'Groundwater mining'], a: 1, x: 'Drip and sprinkler systems improve water-use efficiency.', t: 'ARD' },
+      { q: 'Which scheme is most directly linked to food processing for individuals/groups?', o: ['PMFME', 'MGNREGA', 'Ayushman Bharat', 'PMAY-G', 'Beti Bachao'], a: 0, x: 'PM Formalisation of Micro food processing Enterprises supports micro food-processing units.', t: 'Schemes' },
+      { q: 'A strong Mains descriptive answer should include:', o: ['Only definitions', 'Only opinions', 'Structure, evidence/scheme linkage, and way forward', 'Bullet points with no conclusion', 'Maximum length regardless of relevance'], a: 2, x: 'Structure + relevant evidence + practical way forward is the scoring formula.', t: 'Mains' },
+    ],
+  },
+]
