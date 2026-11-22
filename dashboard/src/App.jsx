@@ -31,6 +31,7 @@ function NavButton({ active, children, onClick }) {
 
 function Sidebar({ view, setView, docs, progress }) {
   const [search, setSearch] = useState('')
+  const [menuOpen, setMenuOpen] = useState(() => typeof window === 'undefined' || window.innerWidth > 900)
   const term = search.trim().toLowerCase()
   const filtered = term
     ? docTree.map((group) => ({
@@ -39,8 +40,13 @@ function Sidebar({ view, setView, docs, progress }) {
       })).filter((group) => group.docs.length)
     : docTree
 
+  const go = (nextView) => {
+    setView(nextView)
+    if (typeof window !== 'undefined' && window.innerWidth <= 900) setMenuOpen(false)
+  }
+
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${menuOpen ? 'open' : 'collapsed'}`}>
       <div className="brand">
         <div className="brand-mark">N</div>
         <div>
@@ -49,14 +55,18 @@ function Sidebar({ view, setView, docs, progress }) {
         </div>
       </div>
 
+      <button className="mobile-menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+        {menuOpen ? 'Close menu' : 'Open menu'}
+      </button>
+
       <nav className="nav-stack">
-        <NavButton active={view.type === 'home'} onClick={() => setView({ type: 'home' })}>Today / Home</NavButton>
-        <NavButton active={view.type === 'plan'} onClick={() => setView({ type: 'plan' })}>42-Day Study Plan</NavButton>
-        <NavButton active={view.type === 'patterns'} onClick={() => setView({ type: 'patterns' })}>Exam Pattern</NavButton>
-        <NavButton active={view.type === 'targets'} onClick={() => setView({ type: 'targets' })}>Score Targets</NavButton>
-        <NavButton active={view.type === 'quiz'} onClick={() => setView({ type: 'quiz' })}>Take a Test</NavButton>
-        <NavButton active={view.type === 'progress'} onClick={() => setView({ type: 'progress' })}>Progress Board</NavButton>
-        <NavButton active={view.type === 'links'} onClick={() => setView({ type: 'links' })}>Official Sources</NavButton>
+        <NavButton active={view.type === 'home'} onClick={() => go({ type: 'home' })}>Today / Home</NavButton>
+        <NavButton active={view.type === 'plan'} onClick={() => go({ type: 'plan' })}>42-Day Study Plan</NavButton>
+        <NavButton active={view.type === 'patterns'} onClick={() => go({ type: 'patterns' })}>Exam Pattern</NavButton>
+        <NavButton active={view.type === 'targets'} onClick={() => go({ type: 'targets' })}>Score Targets</NavButton>
+        <NavButton active={view.type === 'quiz'} onClick={() => go({ type: 'quiz' })}>Take a Test</NavButton>
+        <NavButton active={view.type === 'progress'} onClick={() => go({ type: 'progress' })}>Progress Board</NavButton>
+        <NavButton active={view.type === 'links'} onClick={() => go({ type: 'links' })}>Official Sources</NavButton>
       </nav>
 
       <div className="sidebar-section">
@@ -82,7 +92,7 @@ function Sidebar({ view, setView, docs, progress }) {
               <button
                 key={doc.path}
                 className={`doc-link ${view.type === 'doc' && view.path === doc.path ? 'active' : ''}`}
-                onClick={() => setView({ type: 'doc', path: doc.path })}
+                onClick={() => go({ type: 'doc', path: doc.path })}
               >
                 {doc.name}
               </button>
