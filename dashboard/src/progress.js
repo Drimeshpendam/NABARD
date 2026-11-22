@@ -1,64 +1,63 @@
-// NABARD progress model — weights mirror the sections that matter.
+import { ardTopics, esiTopics, gaTopics, interviewTopics, mainsTopics, qualifyingTopics } from './analysis.js'
+
+const firstNumber = (value) => Number(String(value || '').match(/\d+(?:\.\d+)?/)?.[0] || 0)
+const withWeight = (topic, sectionMultiplier) => ({
+  ...topic,
+  w: Number((firstNumber(topic.share || topic.expected) * sectionMultiplier).toFixed(1)),
+})
+
+const qualifyingWeights = { Reasoning: 20, 'English Language': 30, 'Computer Knowledge': 20, 'Quantitative Aptitude': 20, 'Decision Making': 10 }
+const mainsWeights = { 'General English Descriptive': 50, 'ESI + ARD Objective': 25, 'ESI + ARD Descriptive': 25 }
+
 export const papers = [
   {
     id: 'phase1-merit',
     name: 'Phase I — Merit Section',
-    gate: 'GA 20 + ESI 40 + ARD 40',
+    gate: 'GA 20 + ESI 40 + ARD 40 · target 65–70/100',
     topics: [
-      { name: 'General Awareness', w: 20, pct: 15, last: '2026-11-22', subs: [
-        { name: 'NABARD/RBI + rural economy news', exp: 'high', patterns: ['institution facts', 'recent actions'] },
-        { name: 'Schemes + reports', exp: 'high', patterns: ['ministry mapping', 'launch/features', 'rank/index'] },
-      ]},
-      { name: 'Economic & Social Issues', w: 40, pct: 10, last: '2026-11-22', subs: [
-        { name: 'Macro + policy', exp: 'high', patterns: ['GDP/inflation', 'monetary/fiscal basics'] },
-        { name: 'Social sector', exp: 'high', patterns: ['poverty/employment', 'health/education/gender'] },
-      ]},
-      { name: 'Agriculture & Rural Development', w: 40, pct: 20, last: '2026-11-22', subs: [
-        { name: 'Agri fundamentals', exp: 'high', patterns: ['soil/crops/irrigation', 'animal/fisheries'] },
-        { name: 'Rural institutions + schemes', exp: 'very high', patterns: ['NABARD/cooperatives', 'PMFBY/PM-KISAN/FPO'] },
-      ]},
+      ...ardTopics.map((topic) => withWeight(topic, 0.4)),
+      ...esiTopics.map((topic) => withWeight(topic, 0.4)),
+      ...gaTopics.map((topic) => withWeight(topic, 0.2)),
     ],
   },
   {
     id: 'phase1-qualifying',
     name: 'Phase I — Qualifying Sections',
-    gate: 'clear each sectional cutoff',
-    topics: [
-      { name: 'Reasoning', w: 20, pct: 10, last: '2026-11-22' },
-      { name: 'English Language', w: 30, pct: 10, last: '2026-11-22' },
-      { name: 'Computer Knowledge', w: 20, pct: 10, last: '2026-11-22' },
-      { name: 'Quantitative Aptitude', w: 20, pct: 10, last: '2026-11-22' },
-      { name: 'Decision Making', w: 10, pct: 10, last: '2026-11-22' },
-    ],
+    gate: 'Clear every sectional floor; do not spend merit-section time here',
+    topics: qualifyingTopics.map((topic) => ({ ...topic, w: qualifyingWeights[topic.name] || 0 })),
   },
   {
     id: 'mains',
     name: 'Phase II — Mains',
-    gate: 'target 140+/200',
-    topics: [
-      { name: 'General English descriptive', w: 50, pct: 5, last: null },
-      { name: 'ESI + ARD objective', w: 25, pct: 10, last: null },
-      { name: 'ESI + ARD descriptive', w: 25, pct: 5, last: null },
-    ],
+    gate: 'Target 140–150+/200',
+    topics: mainsTopics.map((topic) => ({ ...topic, w: mainsWeights[topic.name] || 0 })),
   },
   {
     id: 'interview',
-    name: 'Interview',
-    gate: 'target 30+/50',
-    topics: [
-      { name: 'NABARD awareness', w: 40, pct: 10, last: '2026-11-22' },
-      { name: 'Agriculture/rural-development opinion', w: 35, pct: 10, last: null },
-      { name: 'Mock interview reps', w: 25, pct: 0, last: null },
-    ],
+    name: 'Interview + Psychometric Readiness',
+    gate: 'Interview target 30+/50 · psychometric qualifying',
+    topics: interviewTopics.map((topic) => ({ ...topic, w: 100 })),
   },
 ]
 
-export const paperPct = (p) => Math.round(p.topics.reduce((s, t) => s + t.pct * t.w, 0) / 100)
+export const topicCompletion = (topic, completed) => {
+  const total = topic.checklist?.length || 1
+  const done = (topic.checklist || []).filter((item) => completed[item.id]).length
+  return { done, total, pct: Math.round(done / total * 100) }
+}
 
-export const staleState = (t, now = new Date()) => {
-  if (t.pct === 0) return 'none'
-  if (!t.last) return 'stale'
-  const days = Math.floor((now - new Date(t.last)) / 86400000)
+export const paperPct = (paper, completed) => Math.round(
+  paper.topics.reduce((sum, topic) => sum + topicCompletion(topic, completed).pct * topic.w, 0) / 100,
+)
+
+export const topicLastStudied = (topic, completed) => {
+  const dates = (topic.checklist || []).map((item) => completed[item.id]).filter(Boolean).sort()
+  return dates[dates.length - 1] || null
+}
+
+export const staleState = (last, now = new Date()) => {
+  if (!last) return 'none'
+  const days = Math.floor((now - new Date(last)) / 86400000)
   if (days <= 3) return 'fresh'
   if (days <= 7) return 'soon'
   return 'stale'

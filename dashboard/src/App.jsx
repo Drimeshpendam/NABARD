@@ -3,12 +3,13 @@ import { marked } from 'marked'
 import { docTree, getDoc } from './content.js'
 import { backRevision, checkpoints, days, meritSections, notesForSubject, qualifyingSections, rotationFor, subjectColors } from './plan.js'
 import { mains, phase1 } from './patterns.js'
-import { papers, staleState } from './progress.js'
+import { paperPct, papers, staleState, topicCompletion, topicLastStudied } from './progress.js'
+import { formatTargets, researchSources, timePlan } from './analysis.js'
 import { practiceLinks } from './links.js'
 import { quizzes } from './quiz.js'
 
 const LS_DONE = 'nabard-done-v1'
-const LS_PROGRESS = 'nabard-progress-v1'
+const LS_PROGRESS = 'nabard-progress-v2'
 const LS_QUIZ = 'nabard-quiz-v1'
 
 const todayISO = () => new Date().toISOString().slice(0, 10)
@@ -244,14 +245,43 @@ function PatternBlock({ block }) {
       <div className="pattern-grid">
         {block.topics.map((topic) => (
           <article className="pattern-card" key={topic.name}>
-            <div className="pattern-title"><b>{topic.name}</b><span>{topic.qs}</span></div>
-            <div className="tag">{topic.tag}</div>
-            {topic.patterns.map(([name, detail]) => (
+            <div className="pattern-title"><b>{topic.name}</b><span>{topic.expected || topic.qs}</span></div>
+            <div className="tag">{topic.priority || topic.tag}{topic.seconds ? ` · ${topic.seconds}` : ''}</div>
+            {topic.share && <div className="observed-share">Observed share: {topic.share}</div>}
+            {topic.styles?.length > 0 && (
+              <div className="chip-row compact">
+                {topic.styles.map((style) => <span className="chip subtle" key={style}>{style}</span>)}
+              </div>
+            )}
+            {topic.examples?.length > 0 && (
+              <div className="pattern-row">
+                <b>Recent PYQ-style examples</b>
+                <span>{topic.examples.join(' · ')}</span>
+              </div>
+            )}
+            {topic.traps?.length > 0 && (
+              <div className="pattern-row trap-row">
+                <b>Common traps</b>
+                <span>{topic.traps.join(' · ')}</span>
+              </div>
+            )}
+            {(topic.patterns || []).map(([name, detail]) => (
               <div className="pattern-row" key={name}>
                 <b>{name}</b>
                 <span>{detail}</span>
               </div>
             ))}
+            {topic.checklist?.length > 0 && (
+              <div className="asked-list">
+                <b>What is actually asked</b>
+                {topic.checklist.map((item) => (
+                  <div className="asked-item" key={item.id}>
+                    <span>{item.label}</span>
+                    <small>{item.ask}</small>
+                  </div>
+                ))}
+              </div>
+            )}
           </article>
         ))}
       </div>
@@ -264,16 +294,53 @@ function Patterns() {
     <div className="page-stack">
       <header className="page-head">
         <div>
-          <div className="eyebrow">Latest completed pattern</div>
+          <div className="eyebrow">PYQ-informed pattern</div>
           <h1>NABARD Grade A Pattern</h1>
-          <p>Phase I is one combined paper. Paper I and Paper II belong to Mains.</p>
+          <p>Topic weightages below are based on memory-based 2021–2025 question analysis, not official NABARD declarations.</p>
         </div>
       </header>
       <div className="section-summary">
         <div><b>Phase I</b><span>200 Qs · 200 marks · 120 min</span></div>
-        <div><b>Mains</b><span>English 100 + ESI/ARD 100</span></div>
-        <div><b>Interview</b><span>50 marks · psychometric qualifying</span></div>
+        <div><b>Merit formula</b><span>GA 20 + ESI 40 + ARD 40</span></div>
+        <div><b>Merit pace</b><span>~27–30 sec/question + review buffer</span></div>
       </div>
+
+      <div className="card">
+        <h2>120-minute first-pass allocation</h2>
+        <div className="table-wrap">
+          <table>
+            <thead><tr><th>Section</th><th>Questions</th><th>Budget</th><th>Average</th><th>Skip if</th></tr></thead>
+            <tbody>
+              {timePlan.map((row) => (
+                <tr key={row.section}><td>{row.section}</td><td>{row.questions}</td><td>{row.budget}</td><td>{row.avg}</td><td>{row.skip}</td></tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="muted">Keep 10–14 minutes as final review/buffer. In merit sections, mark long statement or numerical questions and return after the first pass.</p>
+      </div>
+
+      <div className="card">
+        <h2>Question-format speed targets</h2>
+        <div className="format-grid">
+          {formatTargets.map((item) => (
+            <div className="format-card" key={item.format}>
+              <b>{item.format}</b>
+              <span>{item.example}</span>
+              <strong>{item.target}</strong>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="card research-card">
+        <h2>Research basis</h2>
+        <ul>
+          {researchSources.map((source) => <li key={source}>{source}</li>)}
+        </ul>
+        <p className="muted">NABARD does not officially publish question papers. Treat observed counts as preparation guidance and keep full-syllabus revision.</p>
+      </div>
+
       {phase1.map((block) => <PatternBlock key={block.section} block={block} />)}
       {mains.map((block) => <PatternBlock key={block.section} block={block} />)}
     </div>
@@ -396,36 +463,57 @@ function Quiz({ scores, saveScore }) {
   )
 }
 
-function ProgressBoard({ progressState, setTopicState }) {
-  const getTopic = (topic) => ({ ...topic, ...(progressState[topic.name] || {}) })
+function ProgressBoard({ progressState, toggleProgressItem }) {
   return (
     <div className="page-stack">
       <header className="page-head">
         <div>
-          <div className="eyebrow">Weighted completion</div>
+          <div className="eyebrow">Checklist-based progress</div>
           <h1>Progress Board</h1>
-          <p>Update a topic after study; weights reflect its exam importance.</p>
+          <p>Progress moves only when you mark a tested subtopic complete. Topic weights follow observed PYQ importance.</p>
         </div>
       </header>
       {papers.map((paper) => {
-        const merged = paper.topics.map(getTopic)
-        const paperPctValue = Math.round(merged.reduce((sum, topic) => sum + topic.pct * topic.w, 0) / 100)
+        const paperPctValue = paperPct(paper, progressState)
         return (
           <section className="card progress-paper" key={paper.id}>
             <div className="progress-head">
               <div><h2>{paper.name}</h2><p>{paper.gate}</p></div>
               <b style={{ color: pctColor(paperPctValue) }}>{paperPctValue}%</b>
             </div>
-            {merged.map((topic) => {
-              const stale = staleState(topic)
+            {paper.topics.map((topic) => {
+              const completion = topicCompletion(topic, progressState)
+              const last = topicLastStudied(topic, progressState)
+              const stale = staleState(last)
               return (
-                <div className="topic-row" key={topic.name}>
+                <div className="topic-row checklist-topic" key={topic.name}>
                   <div className="topic-main">
-                    <div><b>{topic.name}</b><span className={`stale ${stale}`}>{stale}</span></div>
-                    <small>weight {topic.w}% · last studied {topic.last || '—'}</small>
+                    <div className="topic-heading">
+                      <b>{topic.name}</b>
+                      <span className={`stale ${stale}`}>{stale}</span>
+                    </div>
+                    <small>
+                      weight {topic.w}% · expected {topic.expected} · {topic.seconds} · last {last || '—'}
+                    </small>
                   </div>
-                  <input type="range" min="0" max="100" value={topic.pct} onChange={(e) => setTopicState(topic.name, Number(e.target.value))} />
-                  <b>{topic.pct}%</b>
+                  <div className="topic-progress-line">
+                    <span>{completion.done}/{completion.total} subtopics</span>
+                    <b style={{ color: pctColor(completion.pct) }}>{completion.pct}%</b>
+                  </div>
+                  <div className="topic-checklist">
+                    {(topic.checklist || []).map((item) => {
+                      const isDone = Boolean(progressState[item.id])
+                      return (
+                        <label className={`check-item ${isDone ? 'done' : ''}`} key={item.id}>
+                          <input type="checkbox" checked={isDone} onChange={(e) => toggleProgressItem(item.id, e.target.checked)} />
+                          <span>
+                            <b>{item.label}</b>
+                            <small>{item.ask}</small>
+                          </span>
+                        </label>
+                      )
+                    })}
+                  </div>
                 </div>
               )
             })}
@@ -481,18 +569,19 @@ export default function App() {
   const [progressState, setProgressState] = useState(() => readJSON(LS_PROGRESS, {}))
   const [scores, setScores] = useState(() => readJSON(LS_QUIZ, []))
 
-  const paperProgress = useMemo(() => Object.fromEntries(papers.map((paper) => {
-    const merged = paper.topics.map((topic) => ({ ...topic, ...(progressState[topic.name] || {}) }))
-    return [paper.id, Math.round(merged.reduce((sum, topic) => sum + topic.pct * topic.w, 0) / 100)]
-  })), [progressState])
+  const paperProgress = useMemo(() => Object.fromEntries(
+    papers.map((paper) => [paper.id, paperPct(paper, progressState)]),
+  ), [progressState])
 
   const toggleDone = (id) => {
     const next = done.includes(id) ? done.filter((item) => item !== id) : [...done, id]
     setDone(next)
     saveJSON(LS_DONE, next)
   }
-  const setTopicState = (name, pct) => {
-    const next = { ...progressState, [name]: { pct, last: todayISO() } }
+  const toggleProgressItem = (itemId, checked) => {
+    const next = { ...progressState }
+    if (checked) next[itemId] = todayISO()
+    else delete next[itemId]
     setProgressState(next)
     saveJSON(LS_PROGRESS, next)
   }
@@ -512,7 +601,7 @@ export default function App() {
         {view.type === 'patterns' && <Patterns />}
         {view.type === 'targets' && <Targets />}
         {view.type === 'quiz' && <Quiz scores={scores} saveScore={saveScore} />}
-        {view.type === 'progress' && <ProgressBoard progressState={progressState} setTopicState={setTopicState} />}
+        {view.type === 'progress' && <ProgressBoard progressState={progressState} toggleProgressItem={toggleProgressItem} />}
         {view.type === 'links' && <Links />}
         {view.type === 'doc' && <DocView path={view.path} setView={setView} />}
       </main>

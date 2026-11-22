@@ -1,4 +1,3 @@
-// Primary sources only. Prefer official material for schemes, reports, and institutional facts.
 export const practiceLinks = [
   {
     group: 'Official sources',
@@ -8,14 +7,16 @@ export const practiceLinks = [
       { name: 'Press Information Bureau', url: 'https://www.pib.gov.in', note: 'Scheme launches, ministries, official updates' },
       { name: 'Ministry of Agriculture & Farmers Welfare', url: 'https://agriwelfare.gov.in', note: 'Agriculture schemes and programs' },
       { name: 'Ministry of Rural Development', url: 'https://rural.gov.in', note: 'Rural livelihood, employment, housing, development' },
+      { name: 'Union Budget / Economic Survey', url: 'https://www.indiabudget.gov.in', note: 'Budget numbers, allocations, survey themes' },
     ],
   },
   {
-    group: 'Documents to build first',
+    group: 'Open PYQ and analysis sources',
     links: [
-      { name: 'NABARD annual report digest', url: 'https://www.nabard.org', note: 'Functions, refinance, rural development priorities' },
-      { name: 'Economic Survey + Budget notes', url: 'https://www.indiabudget.gov.in', note: 'ESI and GA current-linked static facts' },
-      { name: 'Latest official notification', url: 'https://www.nabard.org', note: 'Eligibility, pattern, discipline vacancies' },
+      { name: 'C4S NABARD PYQ repository', url: 'https://c4scourses.in/nabard-grade-a/pyq/', note: 'Memory-based 2021–2025 questions with tags and analysis' },
+      { name: 'C4S ARD weightage analysis', url: 'https://c4scourses.in/nabard-grade-a/ard-topic-wise-weightage/', note: 'Five-year topic-wise ARD classification' },
+      { name: 'EduTap NABARD PYQs', url: 'https://edutap.in/nabard-grade-a/previous-year-questions/', note: 'Year-wise and phase-wise memory-based papers' },
+      { name: 'Oliveboard NABARD PYQs', url: 'https://www.oliveboard.in/blog/nabard-grade-a-phase-1-pyps/', note: 'Section-wise Phase-I and Phase-II question collections' },
     ],
   },
 ]

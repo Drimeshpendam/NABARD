@@ -157,6 +157,31 @@ th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spa
 .markdown pre code { padding: 0; background: transparent; }
 .markdown blockquote { margin: 16px 0; padding: 10px 16px; border-left: 3px solid var(--green); color: var(--muted); background: rgba(61,220,132,.06); }
 
+.chip-row.compact { margin: 8px 0; }
+.observed-share { margin: 7px 0 10px; color: var(--green); font-size: 12px; font-weight: 900; }
+.format-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+.format-card { display: grid; gap: 7px; padding: 14px; border: 1px solid var(--line); border-radius: 13px; background: var(--panel); }
+.format-card span { color: var(--muted); font-size: 12px; line-height: 1.45; }
+.format-card strong { color: var(--green); }
+.research-card li { color: #c8d3e3; margin: 8px 0; }
+.trap-row b { color: var(--red); }
+.asked-list { display: grid; gap: 8px; margin-top: 14px; }
+.asked-list > b { color: var(--green); }
+.asked-item { display: grid; gap: 4px; padding: 10px; border: 1px solid var(--line); border-radius: 10px; background: rgba(9,13,20,.35); }
+.asked-item span { font-size: 13px; line-height: 1.4; }
+.asked-item small { color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 800; }
+.topic-row.checklist-topic { display: block; }
+.topic-heading { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.topic-progress-line { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 11px 0; color: var(--muted); font-size: 13px; }
+.topic-checklist { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 9px; }
+.check-item { display: flex; align-items: flex-start; gap: 10px; padding: 11px; border: 1px solid var(--line); border-radius: 12px; background: rgba(9,13,20,.35); cursor: pointer; }
+.check-item input { width: 17px; height: 17px; margin-top: 2px; accent-color: var(--green); }
+.check-item span { display: grid; gap: 4px; }
+.check-item b { font-size: 13px; line-height: 1.4; }
+.check-item small { color: var(--muted); text-transform: uppercase; letter-spacing: .06em; font-weight: 800; }
+.check-item.done { border-color: rgba(61,220,132,.45); background: rgba(61,220,132,.08); }
+.check-item.done b { color: var(--green); }
+
 @media (max-width: 900px) {
   .app-shell { display: block; }
   .sidebar { position: relative; width: 100%; height: auto; max-height: 55vh; border-right: 0; border-bottom: 1px solid var(--line); }
